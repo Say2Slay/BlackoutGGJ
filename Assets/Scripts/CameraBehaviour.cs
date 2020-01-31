@@ -10,15 +10,19 @@ public class CameraBehaviour : MonoBehaviour
 
     void Start()
     {
-        Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        if (GameObject.FindGameObjectWithTag("Player") != null)
+            Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
     void LateUpdate()
     {
-        Vector3 spot = Target.position + offset;
-        Vector3 smoothMove = Vector3.Lerp(transform.position, spot, smoothSpeed * Time.deltaTime);
-        transform.position = smoothMove;
+        if (Target != null)
+        {
+            Vector3 spot = Target.position + offset;
+            Vector3 smoothMove = Vector3.Lerp(transform.position, spot, smoothSpeed * Time.deltaTime);
+            transform.position = smoothMove;
 
-        transform.LookAt(Target);
+            transform.LookAt(Target);
+        }
     }
 }
