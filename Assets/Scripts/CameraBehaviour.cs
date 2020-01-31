@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraBehaviour : MonoBehaviour
 {
     Transform Target;
-    public float smoothSpeed = 0.125f;
+    public float smoothSpeed = 10f;
     public Vector3 offset;
 
     void Start()
@@ -16,6 +16,9 @@ public class CameraBehaviour : MonoBehaviour
     void LateUpdate()
     {
         Vector3 spot = Target.position + offset;
-        Vector3 smoothMove = Vector3.Lerp
+        Vector3 smoothMove = Vector3.Lerp(transform.position, spot, smoothSpeed * Time.deltaTime);
+        transform.position = smoothMove;
+
+        transform.LookAt(Target);
     }
 }
