@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Networking.Types;
 
-public class CharacterBehaviour : MonoBehaviour
+public class CharacterBehaviour : NetworkBehaviour
 {
     public float moveSpeed;
     public float speedBuffer = 1;
@@ -20,9 +22,31 @@ public class CharacterBehaviour : MonoBehaviour
 
     void Update()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        InputMovement();
+    }
+
+    private void InputMovement()
+    {
         x = Input.GetAxis("Horizontal") * moveSpeed * speedBuffer * Time.deltaTime;
         z = Input.GetAxis("Vertical") * moveSpeed * speedBuffer * Time.deltaTime;
 
+        CmdMove();
+    }
+
+    [Command]
+    void CmdMove()
+    {
+        RpcJumpPlayer();
+    }
+
+    [ClientRpc]
+    void RpcJumpPlayer()
+    {
         transform.Translate(x, 0, z);
 
         if (Input.GetButtonDown("Ulti"))
