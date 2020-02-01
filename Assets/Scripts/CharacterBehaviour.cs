@@ -52,7 +52,7 @@ public class CharacterBehaviour : NetworkBehaviour
         InputMovement();
 
         scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
-        Debug.Log(scrollSelection);
+        //Debug.Log(scrollSelection);
         InputCapacities();
     }
 
