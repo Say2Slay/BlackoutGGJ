@@ -16,7 +16,9 @@ public class CharacterBehaviour : NetworkBehaviour
     int scrollSelection, select;
     public RectTransform powers;
     public Image[] capacities;
-    private Vector3 moveDir;
+
+    public bool Steuned;
+    public string PlayerTag;
 
     Vector3 moveDir;
 
@@ -93,6 +95,7 @@ public class CharacterBehaviour : NetworkBehaviour
     void RpcMovePlayer()
     {
         transform.Translate(moveDir, Space.World);
+
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
