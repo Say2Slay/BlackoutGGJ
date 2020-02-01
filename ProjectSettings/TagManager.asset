@@ -7,6 +7,8 @@ TagManager:
   - powersList
   - StaminaBar
   - UltiIcon
+  - Spawner
+  - Spawnlist
   layers:
   - Default
   - TransparentFX
