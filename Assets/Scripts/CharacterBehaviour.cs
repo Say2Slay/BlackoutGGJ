@@ -19,38 +19,32 @@ public class CharacterBehaviour : NetworkBehaviour
 
     public RectTransform powers;
     public Image[] capacities;
-    public Rigidbody rigidbody;
+    private Vector3 moveDir;
 
     void Awake()
     {
         cooldown = delay;
-
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
         capacities = powers.GetComponentsInChildren<Image>();
         List<Image> capacitiesList = new List<Image>(capacities);
         capacitiesList.RemoveAt(0);
         capacities = capacitiesList.ToArray();
     }
-
     void Start()
     {
         cooldown = delay;
-        rigidbody = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
     }
-
     void FixedUpdate()
     {
         if (!isLocalPlayer)
         {
             return;
         }
-
         InputMovement();
-
         scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         //Debug.Log(scrollSelection);
         InputCapacities();
@@ -58,27 +52,22 @@ public class CharacterBehaviour : NetworkBehaviour
 
     private void InputMovement()
     {
-        x = Input.GetAxis("Horizontal") * moveSpeed * speedBuffer * Time.deltaTime;
-        z = Input.GetAxis("Vertical") * moveSpeed * speedBuffer * Time.deltaTime;
-
-        if (x != 0 || z != 0)
-            CmdMove();
+        x = Input.GetAxisRaw("Horizontal");
+        z = Input.GetAxisRaw("Vertical");
+        moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
+        CmdMove();
     }
 
     private void InputCapacities()
     {
         if (scrollSelection < 0)
             select--;
-
         if (scrollSelection > 0)
             select++;
-
         if (select > capacities.Length - 1)
             select = 0;
-
         if (select < 0)
             select = capacities.Length - 1;
-
         //Debug.Log(select);
         for (int i = 0; i < capacities.Length; i++)
         {
@@ -92,37 +81,29 @@ public class CharacterBehaviour : NetworkBehaviour
             }
         }
     }
-
     [Command]
     void CmdMove()
     {
         RpcMovePlayer();
     }
-
     [ClientRpc]
     void RpcMovePlayer()
     {
-        rigidbody.AddForce(x * 100, 0, z * 100, ForceMode.Force);
-
+        transform.Translate(moveDir, Space.World);
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
                 StartCoroutine(Noclip());
         }
-
         cooldown -= Time.deltaTime;
     }
-
     IEnumerator Noclip()
     {
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Rigidbody>().useGravity = false;
-
         yield return new WaitForSeconds(5f);
-
         gameObject.GetComponent<Collider>().enabled = true;
         gameObject.GetComponent<Rigidbody>().useGravity = true;
-
         cooldown = delay;
     }
 }
