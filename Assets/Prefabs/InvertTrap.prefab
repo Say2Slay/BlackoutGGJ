@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8577352607319949558}
   - component: {fileID: 7590831086457519882}
   - component: {fileID: 7033058534975818268}
-  - component: {fileID: 2904628541003669174}
+  - component: {fileID: 5943401410383083247}
   m_Layer: 0
   m_Name: InvertTrap
   m_TagString: Untagged
@@ -94,7 +94,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2904628541003669174
+--- !u!114 &5943401410383083247
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,6 +103,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5178655924514299935}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50acc869295bf9948aa96d6bae3c3759, type: 3}
+  m_Script: {fileID: 11500000, guid: 304094c485b78084aa56495bf5559ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Enemy: {fileID: 0}
+  delay: 3
+  trapperTag: 

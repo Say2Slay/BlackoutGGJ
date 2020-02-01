@@ -10,15 +10,18 @@ public class CharacterBehaviour : NetworkBehaviour
     public float moveSpeed;
     public float speedBuffer = 1;
     private float x, z;
+
     public float delay = 10f;
     float cooldown;
 
     public int Team;
     int scrollSelection, select;
+
     public RectTransform powers;
     public Image[] capacities;
+    public Image StaminaBar;
 
-    public bool Steuned;
+    public bool Stunned, Inverted; // traps effects booleans
     public bool playerhat; //bool true = WhiteHat; bool false = BlackHat
 
     public string PlayerTag;
@@ -34,8 +37,10 @@ public class CharacterBehaviour : NetworkBehaviour
 
     void Awake()
     {
-
+        StaminaBar = GameObject.FindGameObjectWithTag("StaminaBar").GetComponent<Image>();
+        
         cooldown = delay;
+
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
         capacities = powers.GetComponentsInChildren<Image>();
         List<Image> capacitiesList = new List<Image>(capacities);
@@ -45,22 +50,12 @@ public class CharacterBehaviour : NetworkBehaviour
     void Start()
     {
         cooldown = delay;
-
     }
-
 
     void FixedUpdate()
     {
         if (!isLocalPlayer)
-        {
             return;
-        }
-
-        InputMovement();
-        scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
-        InputCapacities();
-
-        Debug.Log(Stamina);
 
         if (!Run && Stamina < 100)
         {
@@ -72,23 +67,32 @@ public class CharacterBehaviour : NetworkBehaviour
                 StaminaLock = false;
             }
         }
+
         Run = Input.GetButtonUp("Sprint");
-        if (!Steuned)
+
+        if (!Stunned)
         {
             InputMovement();
             InputCapacities();
-            scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         }
+
+        StaminaBar.fillAmount = Stamina / 100f;
     }
 
     private void InputMovement()
     {
-        x = Input.GetAxisRaw("Horizontal");
-        z = Input.GetAxisRaw("Vertical");
+        if (!Inverted)
+        {
+            x = Input.GetAxisRaw("Horizontal");
+            z = Input.GetAxisRaw("Vertical");
+        } else
+        {
+            x = -Input.GetAxisRaw("Horizontal");
+            z = -Input.GetAxisRaw("Vertical");
+        }
 
         if (Input.GetButtonUp("Sprint"))
         {
-            //Debug.Log("lection");
             speedBuffer = 1;
         }
         else if (Input.GetButton("Sprint") && (x != 0 || z != 0))
@@ -135,12 +139,16 @@ public class CharacterBehaviour : NetworkBehaviour
 
     private void InputCapacities()
     {
+        scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         if (scrollSelection < 0)
             select--;
+
         if (scrollSelection > 0)
             select++;
+
         if (select > capacities.Length - 1)
             select = 0;
+
         if (select < 0)
             select = capacities.Length - 1;
 
@@ -176,9 +184,12 @@ public class CharacterBehaviour : NetworkBehaviour
     {
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Rigidbody>().useGravity = false;
+
         yield return new WaitForSeconds(5f);
+
         gameObject.GetComponent<Collider>().enabled = true;
         gameObject.GetComponent<Rigidbody>().useGravity = true;
+
         cooldown = delay;
     }
 }
