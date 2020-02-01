@@ -7,7 +7,7 @@ using UnityEngine.Networking.Types;
 
 public class CharacterBehaviour : NetworkBehaviour
 {
-    public float moveSpeed;
+    public float moveSpeed, rotationSpeed;
     public float speedBuffer = 1;
     private float x, z;
 
@@ -34,6 +34,7 @@ public class CharacterBehaviour : NetworkBehaviour
     private float StaminaIncrease = 30f;
 
     Vector3 moveDir;
+    public Vector3 lookRotation = Vector3.forward;
 
     void Awake()
     {
@@ -71,7 +72,14 @@ public class CharacterBehaviour : NetworkBehaviour
         if (!Stunned)
         {
             InputMovement();
+            Rotate();
             InputCapacities();
+        }
+
+        if (Input.GetButtonDown("Ulti"))
+        {
+            if (!playerhat && cooldown <= 0)
+                StartCoroutine(Noclip());
         }
 
         cooldown -= Time.deltaTime;
@@ -119,9 +127,16 @@ public class CharacterBehaviour : NetworkBehaviour
         }
 
         moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
+        lookRotation = moveDir;
 
         if (x != 0 || z != 0)
             CmdMove();
+    }
+
+    void Rotate()
+    {
+        if (lookRotation != Vector3.zero)
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookRotation, Vector3.up), .3f);
     }
 
     [Command]
@@ -134,11 +149,6 @@ public class CharacterBehaviour : NetworkBehaviour
     void RpcMovePlayer()
     {
         transform.Translate(moveDir, Space.World);
-        if (Input.GetButtonDown("Ulti"))
-        {
-            if (!playerhat && cooldown <= 0)
-                StartCoroutine(Noclip());
-        }
     }
 
     IEnumerator Noclip()

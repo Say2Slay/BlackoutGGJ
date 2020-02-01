@@ -58,12 +58,16 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  Steuned: 0
+  StaminaBar: {fileID: 0}
+  UltiIcon: {fileID: 0}
+  Stunned: 0
+  Inverted: 0
   playerhat: 0
   PlayerTag: 
   Stamina: 100
   Run: 0
   StaminaLock: 0
+  lookSpeed: 10
 --- !u!114 &5550775147284889174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +151,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1001 &4061822420211092204
 PrefabInstance:
