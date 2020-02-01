@@ -9,6 +9,7 @@ public class CharacterBehaviour : NetworkBehaviour
 {
     public float moveSpeed, rotationSpeed;
     public float speedBuffer = 1;
+    public float sprintBuffer = 2;
     private float x, z;
 
     public float delay = 10f;
@@ -109,7 +110,7 @@ public class CharacterBehaviour : NetworkBehaviour
             if (Stamina > 0 && !StaminaLock)
             {
                 Stamina -= StaminaDecrease * Time.deltaTime;
-                speedBuffer = 2;
+                speedBuffer = sprintBuffer;
                 Run = true;
             }
             else if (!StaminaLock)
