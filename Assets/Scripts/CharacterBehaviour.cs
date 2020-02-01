@@ -19,6 +19,7 @@ public class CharacterBehaviour : NetworkBehaviour
 
     public RectTransform powers;
     public Image[] capacities;
+    public Rigidbody rigidbody;
 
     void Awake()
     {
@@ -31,7 +32,17 @@ public class CharacterBehaviour : NetworkBehaviour
         capacities = capacitiesList.ToArray();
     }
 
+    void Start()
+    {
+        cooldown = delay;
+        rigidbody = GetComponent<Rigidbody>();
+    }
+
     void Update()
+    {
+    }
+
+    void FixedUpdate()
     {
         if (!isLocalPlayer)
         {
@@ -73,7 +84,8 @@ public class CharacterBehaviour : NetworkBehaviour
             if (select.Equals(capacities[i]))
             {
                 capacities[i].color = Color.red;
-            } else
+            }
+            else
             {
                 capacities[i].color = Color.white;
             }
@@ -83,21 +95,22 @@ public class CharacterBehaviour : NetworkBehaviour
     [Command]
     void CmdMove()
     {
-        RpcJumpPlayer();
+        RpcMovePlayer();
     }
 
     [ClientRpc]
-    void RpcJumpPlayer()
+    void RpcMovePlayer()
     {
-        transform.Translate(x, 0, z);
-
+        rigidbody.AddForce(x * 100, 0, z * 100, ForceMode.Force);
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
                 StartCoroutine(Noclip());
         }
+
         cooldown -= Time.deltaTime;
     }
+
     IEnumerator Noclip()
     {
         gameObject.GetComponent<Collider>().enabled = false;
