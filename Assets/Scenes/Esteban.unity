@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 127351237}
   m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -52,7 +52,7 @@ LightmapSettings:
     m_AlbedoBoost: 1
     m_EnvironmentLightingMode: 0
     m_EnableBakedLightmaps: 1
-    m_EnableRealtimeLightmaps: 0
+    m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 12
     m_Resolution: 2
@@ -149,8 +149,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.9607843, g: 0.9529412, b: 0.99215686, a: 1}
+  m_Intensity: 0.1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -193,8 +193,8 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
+  m_ColorTemperature: 5500
+  m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
@@ -274,6 +274,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3232900617991170069, guid: 6b9078c5819a9cd4e91eec59ac72ab3c,
+        type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3232900617991170069, guid: 6b9078c5819a9cd4e91eec59ac72ab3c,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3232900617991170069, guid: 6b9078c5819a9cd4e91eec59ac72ab3c,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.0627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 3232900617991170069, guid: 6b9078c5819a9cd4e91eec59ac72ab3c,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.0627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 3232900617991170069, guid: 6b9078c5819a9cd4e91eec59ac72ab3c,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.1254902
       objectReference: {fileID: 0}
     - target: {fileID: 3232900617991170071, guid: 6b9078c5819a9cd4e91eec59ac72ab3c,
         type: 3}
@@ -409,11 +434,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 2867275476852561220, guid: d84e896a83677ac4b9d18c372db4f02f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2867275476852561223, guid: d84e896a83677ac4b9d18c372db4f02f,
         type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1617602973}
+    - target: {fileID: 2867275476852561223, guid: d84e896a83677ac4b9d18c372db4f02f,
+        type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2867275476852561223, guid: d84e896a83677ac4b9d18c372db4f02f,
+        type: 3}
+      propertyPath: m_PlaneDistance
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d84e896a83677ac4b9d18c372db4f02f, type: 3}
 --- !u!1 &1355162515
