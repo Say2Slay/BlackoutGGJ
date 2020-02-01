@@ -6,21 +6,17 @@ using UnityEngine.Networking.Types;
 
 public class CameraBehaviour : NetworkBehaviour
 {
-    Transform Target;
+    public Transform Target;
     public float smoothSpeed = 10f;
     public Vector3 offset;
 
     void LateUpdate()
     {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-
         if (GameObject.FindGameObjectWithTag("Player") != null)
-        {
             Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
+        if (Target.GetComponent<NetworkBehaviour>().isLocalPlayer)
+        {
             Vector3 spot = Target.position + offset;
             Vector3 smoothMove = Vector3.Lerp(transform.position, spot, smoothSpeed * Time.deltaTime);
             transform.position = smoothMove;

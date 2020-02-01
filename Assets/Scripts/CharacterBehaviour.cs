@@ -41,10 +41,6 @@ public class CharacterBehaviour : NetworkBehaviour
         cooldown = delay;
     }
 
-    void Update()
-    {
-    }
-
     void FixedUpdate()
     {
         if (!isLocalPlayer)
@@ -55,16 +51,11 @@ public class CharacterBehaviour : NetworkBehaviour
         InputMovement();
 
         scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
-        //Debug.Log(scrollSelection);
         InputCapacities();
     }
 
     private void InputMovement()
     {
-        x = Input.GetAxisRaw("Horizontal");
-        z = Input.GetAxisRaw("Vertical");
-        moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
-        CmdMove();
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
         moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
@@ -87,7 +78,6 @@ public class CharacterBehaviour : NetworkBehaviour
         if (select < 0)
             select = capacities.Length - 1;
 
-        //Debug.Log(select);
         for (int i = 0; i < capacities.Length; i++)
         {
             if (select == i)
@@ -111,7 +101,6 @@ public class CharacterBehaviour : NetworkBehaviour
     void RpcMovePlayer()
     {
         transform.Translate(moveDir, Space.World);
-
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
