@@ -19,7 +19,7 @@ public class CharacterBehaviour : NetworkBehaviour
 
     public RectTransform powers;
     public Image[] capacities;
-    public Image StaminaBar;
+    public Image StaminaBar, UltiIcon;
 
     public bool Stunned, Inverted; // traps effects booleans
     public bool playerhat; //bool true = WhiteHat; bool false = BlackHat
@@ -38,7 +38,8 @@ public class CharacterBehaviour : NetworkBehaviour
     void Awake()
     {
         StaminaBar = GameObject.FindGameObjectWithTag("StaminaBar").GetComponent<Image>();
-        
+        UltiIcon = GameObject.FindGameObjectWithTag("UltiIcon").GetComponent<Image>();
+
         cooldown = delay;
 
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
@@ -76,7 +77,10 @@ public class CharacterBehaviour : NetworkBehaviour
             InputCapacities();
         }
 
+        cooldown -= Time.deltaTime;
+
         StaminaBar.fillAmount = Stamina / 100f;
+        UltiIcon.fillAmount = cooldown / 10f;
     }
 
     private void InputMovement()
@@ -169,6 +173,7 @@ public class CharacterBehaviour : NetworkBehaviour
     {
         RpcMovePlayer();
     }
+
     [ClientRpc]
     void RpcMovePlayer()
     {
@@ -178,8 +183,8 @@ public class CharacterBehaviour : NetworkBehaviour
             if (Team == 1 && cooldown <= 0)
                 StartCoroutine(Noclip());
         }
-        cooldown -= Time.deltaTime;
     }
+
     IEnumerator Noclip()
     {
         gameObject.GetComponent<Collider>().enabled = false;
