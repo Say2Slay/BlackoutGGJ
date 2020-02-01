@@ -10,7 +10,7 @@ public class CameraBehaviour : NetworkBehaviour
     public float smoothSpeed = 10f;
     public Vector3 offset;
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (GameObject.FindGameObjectWithTag("Player") != null)
             Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
