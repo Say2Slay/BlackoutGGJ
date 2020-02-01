@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class CharacterBehaviour : MonoBehaviour
+public class CharacterBehaviour : NetworkBehaviour
 {
     public float moveSpeed;
     public float speedBuffer = 1;
@@ -20,18 +21,21 @@ public class CharacterBehaviour : MonoBehaviour
 
     void Update()
     {
-        x = Input.GetAxis("Horizontal") * moveSpeed * speedBuffer * Time.deltaTime;
-        z = Input.GetAxis("Vertical") * moveSpeed * speedBuffer * Time.deltaTime;
-
-        transform.Translate(x, 0, z);
-
-        if (Input.GetButtonDown("Ulti"))
+        if (isLocalPlayer)
         {
-            if (Team == 1 && cooldown <= 0)
-                StartCoroutine(Noclip());
-        }
+            x = Input.GetAxis("Horizontal") * moveSpeed * speedBuffer * Time.deltaTime;
+            z = Input.GetAxis("Vertical") * moveSpeed * speedBuffer * Time.deltaTime;
 
-        cooldown -= Time.deltaTime;
+            transform.Translate(x, 0, z);
+
+            if (Input.GetButtonDown("Ulti"))
+            {
+                if (Team == 1 && cooldown <= 0)
+                    StartCoroutine(Noclip());
+            }
+
+            cooldown -= Time.deltaTime;
+        }
     }
 
     IEnumerator Noclip()
