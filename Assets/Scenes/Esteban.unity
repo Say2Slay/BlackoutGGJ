@@ -580,6 +580,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5621179124570706662, guid: 117345fd2844b094abca284b4f025b0e,
+        type: 3}
+      propertyPath: m_MaxDelay
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 5621179124570706663, guid: 117345fd2844b094abca284b4f025b0e,
         type: 3}
       propertyPath: m_LocalPosition.x
