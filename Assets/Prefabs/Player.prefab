@@ -113,7 +113,7 @@ MonoBehaviour:
   moveSpeed: 5
   speedBuffer: 1
   delay: 10
-  Team: 0
+  Team: 1
   powers: {fileID: 0}
   capacities:
   - {fileID: 0}

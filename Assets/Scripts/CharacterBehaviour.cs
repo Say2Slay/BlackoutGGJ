@@ -81,7 +81,7 @@ public class CharacterBehaviour : NetworkBehaviour
         Debug.Log(select);
         for (int i = 0; i < capacities.Length; i++)
         {
-            if (select.Equals(capacities[i]))
+            if (select == i)
             {
                 capacities[i].color = Color.red;
             }
@@ -101,7 +101,12 @@ public class CharacterBehaviour : NetworkBehaviour
     [ClientRpc]
     void RpcMovePlayer()
     {
+<<<<<<< Updated upstream
         rigidbody.AddForce(x * 100, 0, z * 100, ForceMode.Force);
+=======
+        transform.Translate(x, 0, z, Space.World);
+
+>>>>>>> Stashed changes
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
