@@ -10,13 +10,10 @@ public class CharacterBehaviour : NetworkBehaviour
     public float moveSpeed;
     public float speedBuffer = 1;
     private float x, z;
-
     public float delay = 10f;
     float cooldown;
-
     public int Team;
     int scrollSelection, select;
-
     public RectTransform powers;
     public Image[] capacities;
 
@@ -28,28 +25,30 @@ public class CharacterBehaviour : NetworkBehaviour
     void Awake()
     {
         cooldown = delay;
-
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
         capacities = powers.GetComponentsInChildren<Image>();
         List<Image> capacitiesList = new List<Image>(capacities);
         capacitiesList.RemoveAt(0);
         capacities = capacitiesList.ToArray();
     }
-
     void Start()
     {
         cooldown = delay;
     }
+<<<<<<< HEAD
 
+=======
+    void Update()
+    {
+    }
+>>>>>>> 63a43df8f0f5684faaa07dc82301d5d1c406de47
     void FixedUpdate()
     {
         if (!isLocalPlayer)
         {
             return;
         }
-
         InputMovement();
-
         scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         InputCapacities();
     }
@@ -68,16 +67,16 @@ public class CharacterBehaviour : NetworkBehaviour
     {
         if (scrollSelection < 0)
             select--;
-
         if (scrollSelection > 0)
             select++;
-
         if (select > capacities.Length - 1)
             select = 0;
-
         if (select < 0)
             select = capacities.Length - 1;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 63a43df8f0f5684faaa07dc82301d5d1c406de47
         for (int i = 0; i < capacities.Length; i++)
         {
             if (select == i)
@@ -90,13 +89,11 @@ public class CharacterBehaviour : NetworkBehaviour
             }
         }
     }
-
     [Command]
     void CmdMove()
     {
         RpcMovePlayer();
     }
-
     [ClientRpc]
     void RpcMovePlayer()
     {
@@ -106,20 +103,15 @@ public class CharacterBehaviour : NetworkBehaviour
             if (Team == 1 && cooldown <= 0)
                 StartCoroutine(Noclip());
         }
-
         cooldown -= Time.deltaTime;
     }
-
     IEnumerator Noclip()
     {
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Rigidbody>().useGravity = false;
-
         yield return new WaitForSeconds(5f);
-
         gameObject.GetComponent<Collider>().enabled = true;
         gameObject.GetComponent<Rigidbody>().useGravity = true;
-
         cooldown = delay;
     }
 }
