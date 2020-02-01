@@ -10,16 +10,15 @@ public class CharacterBehaviour : NetworkBehaviour
     public float moveSpeed;
     public float speedBuffer = 1;
     private float x, z;
-
     public float delay = 10f;
     float cooldown;
-
     public int Team;
     int scrollSelection, select;
-
     public RectTransform powers;
     public Image[] capacities;
     private Vector3 moveDir;
+
+    Vector3 moveDir;
 
     void Awake()
     {
@@ -34,7 +33,6 @@ public class CharacterBehaviour : NetworkBehaviour
     {
         cooldown = delay;
     }
-
     void Update()
     {
     }
@@ -56,6 +54,12 @@ public class CharacterBehaviour : NetworkBehaviour
         z = Input.GetAxisRaw("Vertical");
         moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
         CmdMove();
+        x = Input.GetAxis("Horizontal");
+        z = Input.GetAxis("Vertical");
+        moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
+
+        if (x != 0 || z != 0)
+            CmdMove();
     }
 
     private void InputCapacities()
@@ -68,7 +72,6 @@ public class CharacterBehaviour : NetworkBehaviour
             select = 0;
         if (select < 0)
             select = capacities.Length - 1;
-        //Debug.Log(select);
         for (int i = 0; i < capacities.Length; i++)
         {
             if (select == i)
