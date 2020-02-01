@@ -19,7 +19,7 @@ public class CharacterBehaviour : NetworkBehaviour
 
     public RectTransform powers;
     public Image[] capacities;
-    public Rigidbody rigidbody;
+    private Vector3 moveDir;
 
     void Awake()
     {
@@ -35,7 +35,6 @@ public class CharacterBehaviour : NetworkBehaviour
     void Start()
     {
         cooldown = delay;
-        rigidbody = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -58,11 +57,10 @@ public class CharacterBehaviour : NetworkBehaviour
 
     private void InputMovement()
     {
-        x = Input.GetAxis("Horizontal") * moveSpeed * speedBuffer * Time.deltaTime;
-        z = Input.GetAxis("Vertical") * moveSpeed * speedBuffer * Time.deltaTime;
-
-        if (x != 0 || z != 0)
-            CmdMove();
+        x = Input.GetAxisRaw("Horizontal");
+        z = Input.GetAxisRaw("Vertical");
+        moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
+        CmdMove();
     }
 
     private void InputCapacities()
@@ -102,8 +100,7 @@ public class CharacterBehaviour : NetworkBehaviour
     [ClientRpc]
     void RpcMovePlayer()
     {
-        rigidbody.AddForce(x * 100, 0, z * 100, ForceMode.Force);
-
+        transform.Translate(moveDir, Space.World);
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
