@@ -113,6 +113,12 @@ MonoBehaviour:
   speedBuffer: 1
   delay: 10
   Team: 0
+  powers: {fileID: 0}
+  capacities:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!54 &7581330927378994632
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Types;
 
@@ -9,12 +10,25 @@ public class CharacterBehaviour : NetworkBehaviour
     public float moveSpeed;
     public float speedBuffer = 1;
     private float x, z;
+
     public float delay = 10f;
     float cooldown;
+
     public int Team;
-    void Start()
+    int scrollSelection, select;
+
+    public RectTransform powers;
+    public Image[] capacities;
+
+    void Awake()
     {
         cooldown = delay;
+
+        powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
+        capacities = powers.GetComponentsInChildren<Image>();
+        List<Image> capacitiesList = new List<Image>(capacities);
+        capacitiesList.RemoveAt(0);
+        capacities = capacitiesList.ToArray();
     }
 
     void Update()
@@ -25,6 +39,10 @@ public class CharacterBehaviour : NetworkBehaviour
         }
 
         InputMovement();
+
+        scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
+        Debug.Log(scrollSelection);
+        InputCapacities();
     }
 
     private void InputMovement()
@@ -33,6 +51,33 @@ public class CharacterBehaviour : NetworkBehaviour
         z = Input.GetAxis("Vertical") * moveSpeed * speedBuffer * Time.deltaTime;
 
         CmdMove();
+    }
+
+    private void InputCapacities()
+    {
+        if (scrollSelection < 0)
+            select--;
+
+        if (scrollSelection > 0)
+            select++;
+
+        if (select > capacities.Length - 1)
+            select = 0;
+
+        if (select < 0)
+            select = capacities.Length - 1;
+
+        Debug.Log(select);
+        for (int i = 0; i < capacities.Length; i++)
+        {
+            if (select.Equals(capacities[i]))
+            {
+                capacities[i].color = Color.red;
+            } else
+            {
+                capacities[i].color = Color.white;
+            }
+        }
     }
 
     [Command]
@@ -57,7 +102,9 @@ public class CharacterBehaviour : NetworkBehaviour
     {
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Rigidbody>().useGravity = false;
+
         yield return new WaitForSeconds(5f);
+
         gameObject.GetComponent<Collider>().enabled = true;
         gameObject.GetComponent<Rigidbody>().useGravity = true;
 
