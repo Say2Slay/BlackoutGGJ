@@ -19,7 +19,6 @@ public class CharacterBehaviour : NetworkBehaviour
 
     public RectTransform powers;
     public Image[] capacities;
-    private Vector3 moveDir;
 
     Vector3 moveDir;
 
@@ -59,19 +58,16 @@ public class CharacterBehaviour : NetworkBehaviour
 
     private void InputMovement()
     {
-<<<<<<< Updated upstream
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
         moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
         CmdMove();
-=======
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
         moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
 
         if (x != 0 || z != 0)
             CmdMove();
->>>>>>> Stashed changes
     }
 
     private void InputCapacities()
@@ -112,10 +108,7 @@ public class CharacterBehaviour : NetworkBehaviour
     void RpcMovePlayer()
     {
         transform.Translate(moveDir, Space.World);
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
