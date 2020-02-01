@@ -44,9 +44,6 @@ public class CharacterBehaviour : NetworkBehaviour
 
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
         capacities = powers.GetComponentsInChildren<Image>();
-        List<Image> capacitiesList = new List<Image>(capacities);
-        capacitiesList.RemoveAt(0);
-        capacities = capacitiesList.ToArray();
     }
     void Start()
     {
@@ -127,6 +124,36 @@ public class CharacterBehaviour : NetworkBehaviour
             CmdMove();
     }
 
+    [Command]
+    void CmdMove()
+    {
+        RpcMovePlayer();
+    }
+
+    [ClientRpc]
+    void RpcMovePlayer()
+    {
+        transform.Translate(moveDir, Space.World);
+        if (Input.GetButtonDown("Ulti"))
+        {
+            if (!playerhat && cooldown <= 0)
+                StartCoroutine(Noclip());
+        }
+    }
+
+    IEnumerator Noclip()
+    {
+        gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.GetComponent<Rigidbody>().useGravity = false;
+
+        yield return new WaitForSeconds(5f);
+
+        gameObject.GetComponent<Collider>().enabled = true;
+        gameObject.GetComponent<Rigidbody>().useGravity = true;
+
+        cooldown = delay;
+    }
+
     public void ChoiceHat()
     {
         if (playerhat)
@@ -150,11 +177,11 @@ public class CharacterBehaviour : NetworkBehaviour
         if (scrollSelection > 0)
             select++;
 
-        if (select > capacities.Length - 1)
+        if (select > capacities.Length)
             select = 0;
 
         if (select < 0)
-            select = capacities.Length - 1;
+            select = capacities.Length;
 
         for (int i = 0; i < capacities.Length; i++)
         {
@@ -167,34 +194,5 @@ public class CharacterBehaviour : NetworkBehaviour
                 capacities[i].color = Color.white;
             }
         }
-    }
-    [Command]
-    void CmdMove()
-    {
-        RpcMovePlayer();
-    }
-
-    [ClientRpc]
-    void RpcMovePlayer()
-    {
-        transform.Translate(moveDir, Space.World);
-        if (Input.GetButtonDown("Ulti"))
-        {
-            if (Team == 1 && cooldown <= 0)
-                StartCoroutine(Noclip());
-        }
-    }
-
-    IEnumerator Noclip()
-    {
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<Rigidbody>().useGravity = false;
-
-        yield return new WaitForSeconds(5f);
-
-        gameObject.GetComponent<Collider>().enabled = true;
-        gameObject.GetComponent<Rigidbody>().useGravity = true;
-
-        cooldown = delay;
     }
 }

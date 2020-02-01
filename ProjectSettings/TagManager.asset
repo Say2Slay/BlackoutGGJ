@@ -6,6 +6,7 @@ TagManager:
   tags:
   - powersList
   - StaminaBar
+  - UltiIcon
   layers:
   - Default
   - TransparentFX
