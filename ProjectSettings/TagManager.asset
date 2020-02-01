@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Interactable
   - powersList
+  - StaminaBar
   layers:
   - Default
   - TransparentFX
