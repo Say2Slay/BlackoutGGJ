@@ -61,7 +61,8 @@ public class CharacterBehaviour : NetworkBehaviour
         x = Input.GetAxis("Horizontal") * moveSpeed * speedBuffer * Time.deltaTime;
         z = Input.GetAxis("Vertical") * moveSpeed * speedBuffer * Time.deltaTime;
 
-        CmdMove();
+        if (x != 0 || z != 0)
+            CmdMove();
     }
 
     private void InputCapacities()
@@ -102,6 +103,7 @@ public class CharacterBehaviour : NetworkBehaviour
     void RpcMovePlayer()
     {
         rigidbody.AddForce(x * 100, 0, z * 100, ForceMode.Force);
+
         if (Input.GetButtonDown("Ulti"))
         {
             if (Team == 1 && cooldown <= 0)
