@@ -78,7 +78,7 @@ public class CharacterBehaviour : NetworkBehaviour
         if (select < 0)
             select = capacities.Length - 1;
 
-        Debug.Log(select);
+        //Debug.Log(select);
         for (int i = 0; i < capacities.Length; i++)
         {
             if (select == i)
