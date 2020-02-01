@@ -12,18 +12,29 @@ public class CharacterBehaviour : NetworkBehaviour
     private float x, z;
     public float delay = 10f;
     float cooldown;
+
     public int Team;
     int scrollSelection, select;
     public RectTransform powers;
     public Image[] capacities;
 
     public bool Steuned;
+    public bool playerhat; //bool true = WhiteHat; bool false = BlackHat
+
     public string PlayerTag;
+
+    public float Stamina = 100;
+    public bool Run;
+    public bool StaminaLock;
+
+    private float StaminaDecrease = 40f;
+    private float StaminaIncrease = 30f;
 
     Vector3 moveDir;
 
     void Awake()
     {
+
         cooldown = delay;
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
         capacities = powers.GetComponentsInChildren<Image>();
@@ -34,33 +45,92 @@ public class CharacterBehaviour : NetworkBehaviour
     void Start()
     {
         cooldown = delay;
-    }
-<<<<<<< HEAD
 
-=======
-    void Update()
-    {
     }
->>>>>>> 63a43df8f0f5684faaa07dc82301d5d1c406de47
+
+
     void FixedUpdate()
     {
         if (!isLocalPlayer)
         {
             return;
         }
+
         InputMovement();
         scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         InputCapacities();
+
+        Debug.Log(Stamina);
+
+        if (!Run && Stamina < 100)
+        {
+
+            Stamina += StaminaIncrease * Time.deltaTime;
+            if (Stamina >= 100)
+            {
+                Stamina = 100;
+                StaminaLock = false;
+            }
+        }
+        Run = Input.GetButtonUp("Sprint");
+        if (!Steuned)
+        {
+            InputMovement();
+            InputCapacities();
+            scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
+        }
     }
 
     private void InputMovement()
     {
-        x = Input.GetAxis("Horizontal");
-        z = Input.GetAxis("Vertical");
+        x = Input.GetAxisRaw("Horizontal");
+        z = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetButtonUp("Sprint"))
+        {
+            //Debug.Log("lection");
+            speedBuffer = 1;
+        }
+        else if (Input.GetButton("Sprint") && (x != 0 || z != 0))
+        {
+            if (Stamina > 0 && !StaminaLock)
+            {
+                Stamina -= StaminaDecrease * Time.deltaTime;
+                speedBuffer = 2;
+                Run = true;
+            }
+            else if (!StaminaLock)
+            {
+                Stamina = 0;
+                StaminaLock = true;
+                speedBuffer = 1;
+            }
+
+            if (Stamina >= 100)
+            {
+                Stamina = 100;
+                StaminaLock = false;
+            }
+        }
+
         moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
 
         if (x != 0 || z != 0)
             CmdMove();
+    }
+
+    public void ChoiceHat()
+    {
+        if (playerhat)
+        {
+            transform.gameObject.tag = "WhiteHat";
+        }
+        else if (!playerhat)
+        {
+            transform.gameObject.tag = "BlackHat";
+        }
+
+        PlayerTag = transform.gameObject.tag;
     }
 
     private void InputCapacities()
@@ -73,10 +143,7 @@ public class CharacterBehaviour : NetworkBehaviour
             select = 0;
         if (select < 0)
             select = capacities.Length - 1;
-<<<<<<< HEAD
 
-=======
->>>>>>> 63a43df8f0f5684faaa07dc82301d5d1c406de47
         for (int i = 0; i < capacities.Length; i++)
         {
             if (select == i)
