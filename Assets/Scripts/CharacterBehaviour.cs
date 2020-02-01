@@ -20,6 +20,9 @@ public class CharacterBehaviour : NetworkBehaviour
     public RectTransform powers;
     public Image[] capacities;
 
+    public bool Steuned;
+    public string PlayerTag;
+
     Vector3 moveDir;
 
     void Awake()
