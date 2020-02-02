@@ -54,7 +54,6 @@ MonoBehaviour:
   speedBuffer: 1
   sprintBuffer: 2
   delay: 10
-  Team: 1
   powers: {fileID: 0}
   capacities:
   - {fileID: 0}
@@ -70,6 +69,10 @@ MonoBehaviour:
   Stamina: 100
   Run: 0
   StaminaLock: 0
+  SpawnPointWhiteHat: {fileID: 8475555425551563583, guid: a38583cb92b408b4480c1932f22febd3,
+    type: 3}
+  SpawnPointBlackHat: {fileID: 6602740476583192850, guid: 3402e04a3f3b22644b38c5054efb52cb,
+    type: 3}
   lookRotation: {x: 0, y: 0, z: 1}
   StunTrap: {fileID: 5069167238701293215, guid: 8debbc54c79724149abd1d5c8bb6cf27,
     type: 3}
