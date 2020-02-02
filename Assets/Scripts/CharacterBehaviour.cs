@@ -38,6 +38,9 @@ public class CharacterBehaviour : NetworkBehaviour
     private float StaminaIncrease = 30f;
     private float trapOffset = 1f;
 
+    public GameObject SpawnPointWhiteHat;
+    public GameObject SpawnPointBlackHat;
+
     //Gestion du mouvement
     Vector3 moveDir;
     public Vector3 lookRotation = Vector3.forward;
@@ -55,10 +58,17 @@ public class CharacterBehaviour : NetworkBehaviour
 
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
         capacities = powers.GetComponentsInChildren<Image>();
+
+        SpawnPointWhiteHat = GameObject.FindGameObjectWithTag("Spawn2");
+        SpawnPointBlackHat = GameObject.FindGameObjectWithTag("Spawn1");
     }
     void Start()
     {
+        //TODO not set to true like this
+        playerhat = false;
+        ChoiceHat();
         cooldown = delay;
+        SpawnPoint();
     }
 
     void FixedUpdate()
@@ -101,13 +111,30 @@ public class CharacterBehaviour : NetworkBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Fire2"))
-            Instantiate(selectedTrap, transform.position - new Vector3(0, trapOffset), Quaternion.identity);
+        if (Input.GetButtonDown("Fire2") && selectedTrap.gameObject.scene.name == null)
+        {
+            CmdSpawnTrap();
+        }
+            
 
         cooldown -= Time.deltaTime;
 
         StaminaBar.fillAmount = Stamina / 100f;
         UltiIcon.fillAmount = cooldown / 10f;
+    }
+
+    [Command]
+    void CmdSpawnTrap()
+    {
+        RpcSpawnTrap();
+    }
+    
+    [ClientRpc]
+    void RpcSpawnTrap()
+    {
+        Instantiate(selectedTrap, transform.position - new Vector3(0, trapOffset), Quaternion.identity);
+        //À changer quand le ChoiceHat() sera utilisé
+        selectedTrap.GetComponent<TrapManager>().trapperTag = transform.tag;
     }
 
     //Déplacement
@@ -202,6 +229,18 @@ public class CharacterBehaviour : NetworkBehaviour
         PlayerTag = transform.gameObject.tag;
     }
 
+    private void SpawnPoint()
+    {
+        if (playerhat)
+        {
+            gameObject.transform.position = SpawnPointBlackHat.transform.position;
+        }
+        else if (!playerhat)
+        {
+            gameObject.transform.position = SpawnPointWhiteHat.transform.position;
+        }
+    }
+
     private void InputCapacities()
     {
         //Sélection des pièges
@@ -246,11 +285,7 @@ public class CharacterBehaviour : NetworkBehaviour
                     Debug.Log("Stun");
                     selectedTrap = StunTrap;
                     break;
-
             }
         }
-
-        //À changer quand le ChoiceHat() sera utilisé
-        selectedTrap.GetComponent<TrapManager>().trapperTag = transform.tag;
     }
 }
