@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class One_or_Two : MonoBehaviour
+public class team1_2 : MonoBehaviour
 {
-    public GameObject PlayerWhite;
-    public GameObject PlayerBlack;
+    public GameObject playerWhite;
+    public GameObject playerBlack;
 
+    public GameObject choosePlayer;
 
+    void Start()
+    {
+         
+    }
 
     public void ChooseTeamElonMusk()
     {
