@@ -7,15 +7,17 @@ using UnityEngine.Networking.Types;
 
 public class CharacterBehaviour : NetworkBehaviour
 {
+    //Essentiel
     public float moveSpeed, rotationSpeed;
     public float speedBuffer = 1;
     public float sprintBuffer = 2;
     private float x, z;
 
+    //Gestion du cooldown de l'ultime
     public float delay = 10f;
     float cooldown;
 
-    public int Team;
+    //Gestion des capacités
     int scrollSelection, select;
 
     public RectTransform powers;
@@ -27,6 +29,7 @@ public class CharacterBehaviour : NetworkBehaviour
 
     public string PlayerTag;
 
+    //Gestion de la stamina
     public float Stamina = 100;
     public bool Run;
     public bool StaminaLock;
@@ -35,6 +38,7 @@ public class CharacterBehaviour : NetworkBehaviour
     private float StaminaIncrease = 30f;
     private float trapOffset = 1f;
 
+    //Gestion du mouvement
     Vector3 moveDir;
     public Vector3 lookRotation = Vector3.forward;
 
@@ -105,6 +109,7 @@ public class CharacterBehaviour : NetworkBehaviour
         UltiIcon.fillAmount = cooldown / 10f;
     }
 
+    //Déplacement
     private void InputMovement()
     {
         if (!Inverted)
@@ -168,6 +173,7 @@ public class CharacterBehaviour : NetworkBehaviour
         transform.Translate(moveDir, Space.World);
     }
 
+    //Ultime du Black Hat
     IEnumerator Noclip()
     {
         gameObject.GetComponent<Collider>().enabled = false;
