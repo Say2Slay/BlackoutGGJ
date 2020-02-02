@@ -51,6 +51,7 @@ MonoBehaviour:
   moveSpeed: 5
   rotationSpeed: 5
   speedBuffer: 1
+  sprintBuffer: 2
   delay: 10
   Team: 1
   powers: {fileID: 0}
@@ -69,6 +70,13 @@ MonoBehaviour:
   Run: 0
   StaminaLock: 0
   lookRotation: {x: 0, y: 0, z: 1}
+  StunTrap: {fileID: 5069167238701293215, guid: 8debbc54c79724149abd1d5c8bb6cf27,
+    type: 3}
+  SpeedTrap: {fileID: 3886737866787301833, guid: 85ef824695957a04fba261e25c7423f1,
+    type: 3}
+  TPTrap: {fileID: 265121066642470141, guid: 138c79ffedb85eb448d4c4b942019b18, type: 3}
+  InvertTrap: {fileID: 5178655924514299935, guid: 8d345d77f852ff34eaca0c26f00e5a96,
+    type: 3}
 --- !u!114 &3691786529875132729
 MonoBehaviour:
   m_ObjectHideFlags: 0

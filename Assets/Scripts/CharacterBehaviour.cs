@@ -33,9 +33,14 @@ public class CharacterBehaviour : NetworkBehaviour
 
     private float StaminaDecrease = 40f;
     private float StaminaIncrease = 30f;
+    private float trapOffset = 1f;
 
     Vector3 moveDir;
     public Vector3 lookRotation = Vector3.forward;
+
+    [SerializeField]
+    public GameObject StunTrap, SpeedTrap, TPTrap, InvertTrap;
+    GameObject selectedTrap;
 
     void Awake()
     {
@@ -79,9 +84,20 @@ public class CharacterBehaviour : NetworkBehaviour
 
         if (Input.GetButtonDown("Ulti"))
         {
-            if (!playerhat && cooldown <= 0)
-                StartCoroutine(Noclip());
+            if (cooldown <= 0)
+            {
+                if (!playerhat)
+                {
+                    StartCoroutine(Noclip());
+                } else
+                {
+                    Debug.Log("Ulti du White Hat");
+                }
+            }
         }
+
+        if (Input.GetButtonDown("Fire2"))
+            Instantiate(selectedTrap, transform.position - new Vector3(0, trapOffset), Quaternion.identity);
 
         cooldown -= Time.deltaTime;
 
@@ -181,6 +197,7 @@ public class CharacterBehaviour : NetworkBehaviour
 
     private void InputCapacities()
     {
+        //Sélection des pièges
         scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         if (scrollSelection < 0)
             select--;
@@ -188,11 +205,11 @@ public class CharacterBehaviour : NetworkBehaviour
         if (scrollSelection > 0)
             select++;
 
-        if (select > capacities.Length)
+        if (select > capacities.Length - 1)
             select = 0;
 
         if (select < 0)
-            select = capacities.Length;
+            select = capacities.Length - 1;
 
         for (int i = 0; i < capacities.Length; i++)
         {
@@ -204,6 +221,30 @@ public class CharacterBehaviour : NetworkBehaviour
             {
                 capacities[i].color = Color.white;
             }
+
+            switch (select)
+            {
+                case 0:
+                    Debug.Log("TP");
+                    selectedTrap = TPTrap;
+                    break;
+                case 1:
+                    Debug.Log("Confusion");
+                    selectedTrap = InvertTrap;
+                    break;
+                case 2:
+                    Debug.Log("Boost vitesse");
+                    selectedTrap = SpeedTrap;
+                    break;
+                case 3:
+                    Debug.Log("Stun");
+                    selectedTrap = StunTrap;
+                    break;
+
+            }
         }
+
+        //À changer quand le ChoiceHat() sera utilisé
+        selectedTrap.GetComponent<TrapManager>().trapperTag = transform.tag;
     }
 }
