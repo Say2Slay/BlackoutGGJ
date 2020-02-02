@@ -37,16 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-<<<<<<< HEAD
   m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0.1760332, g: 0.22030187, b: 0.30262876, a: 1}
-<<<<<<< Updated upstream
-=======
-  m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
->>>>>>> 60c472db7a910ec8e7d36e97532fc98f7bb11954
-=======
->>>>>>> Stashed changes
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -128,7 +120,6 @@ GameObject:
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<< HEAD
   - component: {fileID: 135600971}
   - component: {fileID: 135600970}
   - component: {fileID: 135600969}
@@ -513,10 +504,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1963832050}
   - component: {fileID: 1963832049}
-=======
-  - component: {fileID: 705507995}
-  - component: {fileID: 705507994}
->>>>>>> 60c472db7a910ec8e7d36e97532fc98f7bb11954
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -642,7 +629,6 @@ Camera:
 --- !u!4 &963194228
 Transform:
   m_ObjectHideFlags: 0
-<<<<<<< HEAD
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
@@ -710,15 +696,3 @@ Transform:
     m_RemovedComponents:
     - {fileID: 2904628541003669174, guid: 8d345d77f852ff34eaca0c26f00e5a96, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8d345d77f852ff34eaca0c26f00e5a96, type: 3}
-=======
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> 60c472db7a910ec8e7d36e97532fc98f7bb11954
