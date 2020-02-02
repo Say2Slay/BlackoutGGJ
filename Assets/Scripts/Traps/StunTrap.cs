@@ -11,10 +11,10 @@ public class StunTrap : TrapManager
 
     void Stun()
     {
-        Enemy.GetComponent<CharacterBehaviour>().Steuned = true;
+        Enemy.GetComponent<CharacterBehaviour>().Stunned = true;
         if (delay <= 0)
         {
-            Enemy.GetComponent<CharacterBehaviour>().Steuned = false;
+            Enemy.GetComponent<CharacterBehaviour>().Stunned = false;
             Destroy(gameObject);
         }
     }

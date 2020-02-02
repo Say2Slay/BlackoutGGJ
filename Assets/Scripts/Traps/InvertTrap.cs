@@ -12,18 +12,11 @@ public class InvertTrap : TrapManager
 
     void Invert()
     {
-        float xInverted = -Input.GetAxis("Horizontal");
-        float zInverted = -Input.GetAxis("Vertical");
-
-        float enemySpeed = Enemy.GetComponent<CharacterBehaviour>().moveSpeed;
-        float enemyBuffer = Enemy.GetComponent<CharacterBehaviour>().speedBuffer;
-        Vector3 invertedMoveDir = new Vector3(xInverted, 0, zInverted).normalized * enemySpeed * enemyBuffer * Time.deltaTime;
-
-        //Écrire ici l'inversion des contrôles
+        Enemy.GetComponent<CharacterBehaviour>().Inverted = true;
 
         if (delay <= 0)
         {
-            //Écrire ici le retour à la normale
+            Enemy.GetComponent<CharacterBehaviour>().Inverted = false;
             Destroy(gameObject);
         }
     }

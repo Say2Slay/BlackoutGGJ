@@ -7,60 +7,64 @@ using UnityEngine.Networking.Types;
 
 public class CharacterBehaviour : NetworkBehaviour
 {
-    public float moveSpeed;
+    //Essentiel
+    public float moveSpeed, rotationSpeed;
     public float speedBuffer = 1;
+    public float sprintBuffer = 2;
     private float x, z;
+
+    //Gestion du cooldown de l'ultime
     public float delay = 10f;
     float cooldown;
 
-    public int Team;
+    //Gestion des capacités
     int scrollSelection, select;
+
     public RectTransform powers;
     public Image[] capacities;
+    public Image StaminaBar, UltiIcon;
 
-    public bool Steuned;
+    public bool Stunned, Inverted; // traps effects booleans
     public bool playerhat; //bool true = WhiteHat; bool false = BlackHat
 
     public string PlayerTag;
 
+    //Gestion de la stamina
     public float Stamina = 100;
     public bool Run;
     public bool StaminaLock;
 
     private float StaminaDecrease = 40f;
     private float StaminaIncrease = 30f;
+    private float trapOffset = 1f;
 
+    //Gestion du mouvement
     Vector3 moveDir;
+    public Vector3 lookRotation = Vector3.forward;
+
+    [SerializeField]
+    public GameObject StunTrap, SpeedTrap, TPTrap, InvertTrap;
+    GameObject selectedTrap;
 
     void Awake()
     {
+        StaminaBar = GameObject.FindGameObjectWithTag("StaminaBar").GetComponent<Image>();
+        UltiIcon = GameObject.FindGameObjectWithTag("UltiIcon").GetComponent<Image>();
 
         cooldown = delay;
+
         powers = GameObject.FindGameObjectWithTag("powersList").GetComponent<RectTransform>();
         capacities = powers.GetComponentsInChildren<Image>();
-        List<Image> capacitiesList = new List<Image>(capacities);
-        capacitiesList.RemoveAt(0);
-        capacities = capacitiesList.ToArray();
     }
     void Start()
     {
         cooldown = delay;
-
     }
-
 
     void FixedUpdate()
     {
         if (!isLocalPlayer)
-        {
             return;
-        }
-
-        InputMovement();
-        scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
-        InputCapacities();
-
-        Debug.Log(Stamina);
 
         if (!Run && Stamina < 100)
         {
@@ -72,23 +76,54 @@ public class CharacterBehaviour : NetworkBehaviour
                 StaminaLock = false;
             }
         }
+
         Run = Input.GetButtonUp("Sprint");
-        if (!Steuned)
+
+        if (!Stunned)
         {
             InputMovement();
+            Rotate();
             InputCapacities();
-            scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         }
+
+        if (Input.GetButtonDown("Ulti"))
+        {
+            if (cooldown <= 0)
+            {
+                if (!playerhat)
+                {
+                    StartCoroutine(Noclip());
+                } else
+                {
+                    Debug.Log("Ulti du White Hat");
+                }
+            }
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+            Instantiate(selectedTrap, transform.position - new Vector3(0, trapOffset), Quaternion.identity);
+
+        cooldown -= Time.deltaTime;
+
+        StaminaBar.fillAmount = Stamina / 100f;
+        UltiIcon.fillAmount = cooldown / 10f;
     }
 
+    //Déplacement
     private void InputMovement()
     {
-        x = Input.GetAxisRaw("Horizontal");
-        z = Input.GetAxisRaw("Vertical");
+        if (!Inverted)
+        {
+            x = Input.GetAxisRaw("Horizontal");
+            z = Input.GetAxisRaw("Vertical");
+        } else
+        {
+            x = -Input.GetAxisRaw("Horizontal");
+            z = -Input.GetAxisRaw("Vertical");
+        }
 
         if (Input.GetButtonUp("Sprint"))
         {
-            //Debug.Log("lection");
             speedBuffer = 1;
         }
         else if (Input.GetButton("Sprint") && (x != 0 || z != 0))
@@ -96,7 +131,7 @@ public class CharacterBehaviour : NetworkBehaviour
             if (Stamina > 0 && !StaminaLock)
             {
                 Stamina -= StaminaDecrease * Time.deltaTime;
-                speedBuffer = 2;
+                speedBuffer = sprintBuffer;
                 Run = true;
             }
             else if (!StaminaLock)
@@ -114,9 +149,42 @@ public class CharacterBehaviour : NetworkBehaviour
         }
 
         moveDir = new Vector3(x, 0, z).normalized * moveSpeed * speedBuffer * Time.deltaTime;
+        lookRotation = moveDir;
 
         if (x != 0 || z != 0)
             CmdMove();
+    }
+
+    void Rotate()
+    {
+        if (lookRotation != Vector3.zero)
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookRotation, Vector3.up), .3f);
+    }
+
+    [Command]
+    void CmdMove()
+    {
+        RpcMovePlayer();
+    }
+
+    [ClientRpc]
+    void RpcMovePlayer()
+    {
+        transform.Translate(moveDir, Space.World);
+    }
+
+    //Ultime du Black Hat
+    IEnumerator Noclip()
+    {
+        gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.GetComponent<Rigidbody>().useGravity = false;
+
+        yield return new WaitForSeconds(5f);
+
+        gameObject.GetComponent<Collider>().enabled = true;
+        gameObject.GetComponent<Rigidbody>().useGravity = true;
+
+        cooldown = delay;
     }
 
     public void ChoiceHat()
@@ -135,12 +203,17 @@ public class CharacterBehaviour : NetworkBehaviour
 
     private void InputCapacities()
     {
+        //Sélection des pièges
+        scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         if (scrollSelection < 0)
             select--;
+
         if (scrollSelection > 0)
             select++;
+
         if (select > capacities.Length - 1)
             select = 0;
+
         if (select < 0)
             select = capacities.Length - 1;
 
@@ -154,31 +227,30 @@ public class CharacterBehaviour : NetworkBehaviour
             {
                 capacities[i].color = Color.white;
             }
+
+            switch (select)
+            {
+                case 0:
+                    Debug.Log("TP");
+                    selectedTrap = TPTrap;
+                    break;
+                case 1:
+                    Debug.Log("Confusion");
+                    selectedTrap = InvertTrap;
+                    break;
+                case 2:
+                    Debug.Log("Boost vitesse");
+                    selectedTrap = SpeedTrap;
+                    break;
+                case 3:
+                    Debug.Log("Stun");
+                    selectedTrap = StunTrap;
+                    break;
+
+            }
         }
-    }
-    [Command]
-    void CmdMove()
-    {
-        RpcMovePlayer();
-    }
-    [ClientRpc]
-    void RpcMovePlayer()
-    {
-        transform.Translate(moveDir, Space.World);
-        if (Input.GetButtonDown("Ulti"))
-        {
-            if (Team == 1 && cooldown <= 0)
-                StartCoroutine(Noclip());
-        }
-        cooldown -= Time.deltaTime;
-    }
-    IEnumerator Noclip()
-    {
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<Rigidbody>().useGravity = false;
-        yield return new WaitForSeconds(5f);
-        gameObject.GetComponent<Collider>().enabled = true;
-        gameObject.GetComponent<Rigidbody>().useGravity = true;
-        cooldown = delay;
+
+        //À changer quand le ChoiceHat() sera utilisé
+        selectedTrap.GetComponent<TrapManager>().trapperTag = transform.tag;
     }
 }
