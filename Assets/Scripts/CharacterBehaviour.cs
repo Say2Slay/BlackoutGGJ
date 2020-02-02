@@ -78,6 +78,7 @@ public class CharacterBehaviour : NetworkBehaviour
         }
 
         Run = Input.GetButtonUp("Sprint");
+        scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
 
         if (!Stunned)
         {
@@ -204,7 +205,6 @@ public class CharacterBehaviour : NetworkBehaviour
     private void InputCapacities()
     {
         //Sélection des pièges
-        scrollSelection = Mathf.RoundToInt(Input.GetAxis("Mouse ScrollWheel") * 10);
         if (scrollSelection < 0)
             select--;
 

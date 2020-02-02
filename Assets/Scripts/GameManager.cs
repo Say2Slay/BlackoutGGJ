@@ -10,7 +10,9 @@ public class GameManager : NetworkBehaviour
 
     public Dictionary<string, bool> objective = new Dictionary<string, bool>();
 
-    // Start is called before the first frame update
+    public float timer = 180f;
+    public Text timerUI;
+
     void Start()
     {
         objective.Add("server", true);
@@ -19,9 +21,11 @@ public class GameManager : NetworkBehaviour
         objective.Add("generator", false);
     }
 
-    // Update is called once per frame
     void Update()
     {
+        float tempTimer = timer - Time.deltaTime;
+        timerUI.text = tempTimer.ToString("00 : 00");
+
         if (Serveuractivation)
         {
         }
