@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7581330927378994677}
   - component: {fileID: 7581330927378994633}
+  - component: {fileID: 9220949176759998853}
   - component: {fileID: 3691786529875132729}
   - component: {fileID: -8954648208340318258}
   - component: {fileID: -1374551297836082854}
@@ -81,6 +82,22 @@ MonoBehaviour:
   TPTrap: {fileID: 265121066642470141, guid: 138c79ffedb85eb448d4c4b942019b18, type: 3}
   InvertTrap: {fileID: 5178655924514299935, guid: 8d345d77f852ff34eaca0c26f00e5a96,
     type: 3}
+--- !u!114 &9220949176759998853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581330927378994635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9699dba6a052bce46925da3c8e1f4127, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherPlayer: {fileID: 1658943763422603930, guid: fe2c1a3c6324472418e5fc9f32e39e4d,
+    type: 3}
+  maxAngle: 30
+  maxRadius: 15
 --- !u!114 &3691786529875132729
 MonoBehaviour:
   m_ObjectHideFlags: 0

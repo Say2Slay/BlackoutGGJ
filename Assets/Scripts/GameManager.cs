@@ -10,7 +10,8 @@ public class GameManager : NetworkBehaviour
 
     public Dictionary<string, bool> objective = new Dictionary<string, bool>();
 
-    public float timer = 180f;
+    [SyncVar]
+    public float timer;
     public Text timerUI;
 
     void Start()
@@ -23,11 +24,23 @@ public class GameManager : NetworkBehaviour
 
     void Update()
     {
-        float tempTimer = timer - Time.deltaTime;
-        timerUI.text = tempTimer.ToString("00 : 00");
+        timer = timer - Time.deltaTime;
+        timerUI.text = timer.ToString("0 00");
+
+        if (timer <= 0)
+        {
+            timer = 0;
+            Endgame();
+        }
 
         if (Serveuractivation)
         {
         }
+    }
+
+    void Endgame()
+    {
+        Time.timeScale = 0;
+        //Meilleures conditions de fin de partie à mettre
     }
 }
