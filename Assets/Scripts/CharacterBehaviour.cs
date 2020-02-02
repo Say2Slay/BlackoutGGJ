@@ -58,6 +58,9 @@ public class CharacterBehaviour : NetworkBehaviour
     }
     void Start()
     {
+        //TODO not set to true like this
+        playerhat = true;
+        ChoiceHat();
         cooldown = delay;
     }
 
@@ -100,13 +103,30 @@ public class CharacterBehaviour : NetworkBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Fire2"))
-            Instantiate(selectedTrap, transform.position - new Vector3(0, trapOffset), Quaternion.identity);
+        if (Input.GetButtonDown("Fire2") && selectedTrap.gameObject.scene.name == null)
+        {
+            CmdSpawnTrap();
+        }
+            
 
         cooldown -= Time.deltaTime;
 
         StaminaBar.fillAmount = Stamina / 100f;
         UltiIcon.fillAmount = cooldown / 10f;
+    }
+
+    [Command]
+    void CmdSpawnTrap()
+    {
+        RpcSpawnTrap();
+    }
+    
+    [ClientRpc]
+    void RpcSpawnTrap()
+    {
+        Instantiate(selectedTrap, transform.position - new Vector3(0, trapOffset), Quaternion.identity);
+        //À changer quand le ChoiceHat() sera utilisé
+        selectedTrap.GetComponent<TrapManager>().trapperTag = transform.tag;
     }
 
     //Déplacement
@@ -246,11 +266,7 @@ public class CharacterBehaviour : NetworkBehaviour
                     Debug.Log("Stun");
                     selectedTrap = StunTrap;
                     break;
-
             }
         }
-
-        //À changer quand le ChoiceHat() sera utilisé
-        selectedTrap.GetComponent<TrapManager>().trapperTag = transform.tag;
     }
 }

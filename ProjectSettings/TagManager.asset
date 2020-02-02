@@ -9,6 +9,8 @@ TagManager:
   - UltiIcon
   - Spawner
   - Spawnlist
+  - WhiteHat
+  - BlackHat
   layers:
   - Default
   - TransparentFX

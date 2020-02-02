@@ -1250,6 +1250,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5087510600969264810, guid: 2df3196f9a15d2b438317e8b76153297,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5087510600969264811, guid: 2df3196f9a15d2b438317e8b76153297,
         type: 3}
       propertyPath: m_Name
@@ -1338,6 +1343,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5621179124570706662, guid: 117345fd2844b094abca284b4f025b0e,
+        type: 3}
+      propertyPath: m_PlayerPrefab
+      value: 
+      objectReference: {fileID: 1658943763422603940, guid: fe2c1a3c6324472418e5fc9f32e39e4d,
+        type: 3}
     - target: {fileID: 5621179124570706663, guid: 117345fd2844b094abca284b4f025b0e,
         type: 3}
       propertyPath: m_LocalPosition.x
